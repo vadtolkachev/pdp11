@@ -1,9 +1,12 @@
 #pragma once
 
-const unsigned int window_x = 0;
-const unsigned int window_y = 0;
-const unsigned int window_width = 1440;
-const unsigned int window_height = 900;
+
+const bool full_screen_mode = false;
+
+const unsigned int window_x = 10;
+const unsigned int window_y = 20;
+const unsigned int window_width = 1420;
+const unsigned int window_height = 820;
 
 const unsigned sizeof_pixel = 4;
 const unsigned pdp_win_width = pdp_screen_width * sizeof_pixel;
@@ -27,7 +30,7 @@ const unsigned button_offset_x = button_width + 30;
 const unsigned button_offset_y = button_height + 30;
 
 const unsigned button_x0 = 30;
-const unsigned button_y0 = 578;
+const unsigned button_y0 = 545;
 
 
 //-------------------------------------------------------------------
@@ -69,22 +72,22 @@ const unsigned load_regs_flags_y = button_y0 + 2 * button_offset_y;
 //CheckBoxes
 //-------------------------------------------------------------------
 const unsigned checkbox_x0 = 30;
-const unsigned checkbox_y0 = 765;
+const unsigned checkbox_y0 = 740;
 
-//const unsigned checkbox_offset_x = 30;
-const unsigned checkbox_offset_y0 = 40;
+const unsigned checkbox_offset_x = 200;
+//const unsigned checkbox_offset_y0 = 40;
 
 const unsigned checkbox_width = button_width+30;
 const unsigned checkbox_height = button_height;
 
-const unsigned synchronization_x = checkbox_x0;
-const unsigned synchronization_y = checkbox_y0 + 0 * checkbox_offset_y0;
+const unsigned synchronization_x = checkbox_x0 + 0 * checkbox_offset_x;
+const unsigned synchronization_y = checkbox_y0;
 
-const unsigned cache_x = checkbox_x0;
-const unsigned cache_y = checkbox_y0 + 1 * checkbox_offset_y0;
+const unsigned cache_x = checkbox_x0 + 1 * checkbox_offset_x;
+const unsigned cache_y = checkbox_y0;
 
-const unsigned pipeline_x = checkbox_x0;
-const unsigned pipeline_y = checkbox_y0 + 2 * checkbox_offset_y0;
+const unsigned pipeline_x = checkbox_x0 + 2 * checkbox_offset_x;
+const unsigned pipeline_y = checkbox_y0;
 //-------------------------------------------------------------------
 //regs and flags
 //-------------------------------------------------------------------
@@ -142,14 +145,14 @@ const unsigned desc_box_width = 300;
 const unsigned desc_box_height = 20;
 
 const unsigned list_box_width = desc_box_width;
-const unsigned list_box_height = 400;
+const unsigned list_box_height = 350;
 
 
 const unsigned ram_x = 700;
 const unsigned ram_y = 10;
 
 const unsigned vram_x = ram_x;
-const unsigned vram_y = 450;
+const unsigned vram_y = 400;
 
 const unsigned rom_x = 1050;
 const unsigned rom_y = ram_y;

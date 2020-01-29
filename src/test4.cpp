@@ -69,7 +69,14 @@ void pdp_start()
     if(!the_main_window.create_main_wnd())
         assert(false);
 
-    ShowWindow(the_main_window.getMainWnd(), SW_SHOW);
+    int cmd_show;
+
+    if(full_screen_mode)
+        cmd_show = SW_MAXIMIZE;
+    else
+        cmd_show = SW_SHOW;
+
+    ShowWindow(the_main_window.getMainWnd(), cmd_show);
 
     DWORD pdp_threadId;
     DWORD video_threadId;

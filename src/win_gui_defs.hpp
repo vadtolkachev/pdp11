@@ -56,7 +56,14 @@ BOOL BaseWindow<DERIVED_TYPE>::create_main_wnd()
     if(!RegisterClass(&wnd))
         assert(false);
 
-    m_hMainWnd = CreateWindowEx(0, wnd.lpszClassName, L"pdp-11", WS_BORDER,
+    DWORD style;
+
+    if(full_screen_mode)
+        style = WS_POPUP;
+    else
+        style = WS_BORDER;
+
+    m_hMainWnd = CreateWindowExW(0, wnd.lpszClassName, L"pdp-11", style,
         window_x, window_y, window_width, window_height,
         NULL, NULL, GetModuleHandle(NULL), this);
 
