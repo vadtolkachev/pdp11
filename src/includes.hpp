@@ -16,6 +16,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
+#include <cmath>
 #include <sys/stat.h>
 
 extern "C"

@@ -13,8 +13,8 @@ class logger;
 #define DBG_PRINTF(...) fprintf(dbg_log_file, __VA_ARGS__) 
 #define DBG_FPRINTF(...) fprintf(__VA_ARGS__) 
 #else
-#define DBG_PRINTF(args)
-#define DBG_FPRINTF(args)
+#define DBG_PRINTF
+#define DBG_FPRINTF
 #endif // ! NDEBUG 
 
 

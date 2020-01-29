@@ -1,6 +1,5 @@
 #pragma once
 #include "pdp11.hpp"
-#include "gui_defines.hpp"
 
 
 extern uint8_t unz_font[128][64];
@@ -21,6 +20,10 @@ public:
 	void unzip_font(uint8_t zipped_font[128][8]);
 
 private:
+	void _3bit_to_8bit(uint8_t src, uint8_t *dest);
+	void _2bit_to_8bit(uint8_t src, uint8_t *dest);
+	void _3bit_to_8bit_round(uint8_t src, uint8_t *dest);
+	void _2bit_to_8bit_round(uint8_t src, uint8_t *dest);
 	void _8bit_to_24bit(uint8_t src, v_rgb *dest);
 	void pdp_to_windows(const uint8_t *src, v_rgb *dest, uint16_t shift_register);
 	void enlarge_window(v_rgb *src, v_rgb *dest);

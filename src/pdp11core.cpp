@@ -16,7 +16,8 @@ pdp11core::pdp11core():
     m_should_stop(false),
     m_done_int(false),
     m_breakpoint(0),
-    m_old_PC(0)
+    m_old_PC(0),
+    m_main_window(nullptr)
 {
     /*m_memory = (uint8_t *)calloc(pdp11_memory_size_sum, sizeof(uint8_t));
     if(!m_memory || errno)
@@ -413,7 +414,7 @@ void pdp11core::print_disasm() const
     const uint16_t *bin = reinterpret_cast<const uint16_t *>(&m_memory[ROM_start]);
     char str_arr[ROM_size / 2][100] = {};
     m_disasm.disasm_to_str(bin, str_arr, m_breakpoint);
-    ::print_disasm(str_arr);
+    m_main_window->print_disasm(str_arr);
 }
 
 
@@ -431,14 +432,14 @@ void pdp11core::print_mem() const
     m_disasm.get_VRAM(bin2, str_arr2);
     m_disasm.get_IO(bin3, str_arr3);
 
-    ::print_memory(str_arr1, str_arr2, str_arr3);
+    m_main_window->print_memory(str_arr1, str_arr2, str_arr3);
 }
 
 
 void pdp11core::print_regs() const
 {
     const uint16_t *regs_addr = reinterpret_cast<const uint16_t *>(&m_memory[pdp11_memory_size]);
-    upd_proc_state(regs_addr, m_status_flags, m_flag_I, m_breakpoint);
+    m_main_window->upd_proc_state(regs_addr, m_status_flags, m_flag_I, m_breakpoint);
 }
 
 
@@ -557,4 +558,10 @@ void pdp11core::zero_ROM()
 void pdp11core::stop()
 {
     m_should_stop = true;
+}
+
+
+void pdp11core::set_main_window(MainWindow *main_window)
+{
+    m_main_window = main_window;
 }

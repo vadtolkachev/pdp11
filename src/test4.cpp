@@ -26,13 +26,11 @@ FILE *dbg_log_file = nullptr;
 FILE *pdp_log_file = nullptr;
 
 
-void pdp_start(_In_ HINSTANCE hInstance);
+void pdp_start();
 
 
-DWORD WINAPI pdp_thread_function(void *ptr);
-DWORD WINAPI video_thread_function(void *ptr);
-
-extern HWND hMainWnd;
+DWORD WINAPI pdp_thread_function(void *ptr) noexcept;
+DWORD WINAPI video_thread_function(void *ptr) noexcept;
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
@@ -50,7 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     dbg_log_file = solver.fopen_dbg("log_file.txt", "w");
     
-    pdp_start(hInstance);
+    pdp_start();
 
     DBG_PRINTF("EXIT_SUCCESS\n");
     solver.fclose_dbg(dbg_log_file);
@@ -60,37 +58,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 
-void pdp_start(_In_ HINSTANCE hInstance)
+void pdp_start()
 {
     pdp11 the_pdp11;
 
-    WNDCLASS wnd = {};
+    MainWindow the_main_window(&the_pdp11);
 
-    wnd.hbrBackground = (HBRUSH)COLOR_WINDOW;
-    wnd.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wnd.hInstance = hInstance;
-    wnd.lpszClassName = L"myWindowClass";
-    wnd.lpfnWndProc = WindowProcedure;
+    the_pdp11.set_main_window(&the_main_window);
 
-    if(!RegisterClassW(&wnd))
+    if(!the_main_window.create_main_wnd())
         assert(false);
 
-    hMainWnd = CreateWindowEx(0, wnd.lpszClassName, L"My Window", WS_POPUP,
-        window_x, window_y, window_width, window_height,
-        nullptr, nullptr, hInstance, reinterpret_cast<LPVOID>(&the_pdp11));
-
-    if(!hMainWnd)
-    {
-        assert(false);
-        return;
-    }
-
-    ShowWindow(hMainWnd, SW_MAXIMIZE);
+    ShowWindow(the_main_window.getMainWnd(), SW_SHOW);
 
     DWORD pdp_threadId;
     DWORD video_threadId;
     HANDLE hPdp = CreateThread(NULL, 0, pdp_thread_function, reinterpret_cast<void *>(&the_pdp11), 0, &pdp_threadId);
-    HANDLE hVideo = CreateThread(NULL, 0, video_thread_function, reinterpret_cast<void *>(&the_pdp11), 0, &video_threadId);
+    HANDLE hVideo = CreateThread(NULL, 0, video_thread_function, reinterpret_cast<void *>(&the_main_window), 0, &video_threadId);
 
     MSG msg = {};
     BOOL bRet;
@@ -119,7 +103,7 @@ void pdp_start(_In_ HINSTANCE hInstance)
 }
 
 
-DWORD WINAPI pdp_thread_function(void *ptr)
+DWORD WINAPI pdp_thread_function(void *ptr) noexcept
 {
     pdp11 *the_pdp11 = reinterpret_cast<pdp11 *>(ptr);
     assert(the_pdp11);
@@ -129,21 +113,22 @@ DWORD WINAPI pdp_thread_function(void *ptr)
 }
 
 
-DWORD WINAPI video_thread_function(void *ptr)
+DWORD WINAPI video_thread_function(void *ptr) noexcept
 {
-    pdp11 *the_pdp11 = reinterpret_cast<pdp11 *>(ptr);
-    assert(the_pdp11);
+    MainWindow *the_main_window = reinterpret_cast<MainWindow *>(ptr);
+    pdp11 *the_pdp11 = the_main_window->get_pdp11();
+    assert(the_main_window);
 
     v_rgb pixels[512 * 512] = {};
 
     pdp_display_controller d_controller;
-    d_controller.set_controller(the_pdp11, pixels);  
+    d_controller.set_controller(the_pdp11, pixels);
 
     while(!the_pdp11->should_exit())
     {
         d_controller.process_buff();
 
-        DrawPixels(hScreen, pixels);
+        the_main_window->DrawPixels(pixels);
         
         Sleep(15);
     }

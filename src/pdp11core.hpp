@@ -9,6 +9,9 @@
 const uint16_t default_PC = ROM_start + 6;
 
 
+class MainWindow;
+
+
 enum class interrupt_type
 {
     IRQ0,
@@ -96,6 +99,7 @@ public:
 
     void stop();
 
+    void set_main_window(MainWindow *main_window);
 
 private:
     uint8_t m_memory[pdp11_memory_size_sum];
@@ -116,6 +120,8 @@ private:
 
     uint16_t m_breakpoint;
     uint16_t m_old_PC;
+
+    MainWindow *m_main_window;
 
     /*
     bool m_stop;

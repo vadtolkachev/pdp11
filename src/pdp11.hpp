@@ -59,6 +59,7 @@ public:
 
     void set_selected(int sel);
     VRet set_bp();
+    void set_main_window(MainWindow *main_window);
     
 private:
     void run();
@@ -71,4 +72,5 @@ private:
     pdp_todo m_todo;
 
     int m_selected;
+    MainWindow *m_main_window;
 };

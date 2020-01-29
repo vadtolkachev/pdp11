@@ -8,7 +8,8 @@ pdp11::pdp11():
     m_exec_is_loaded(false),
     m_should_exit(false),
     m_todo({false, false}),
-    m_selected(-1)
+    m_selected(-1),
+    m_main_window(nullptr)
 {
     m_core.set_pointers();
     pdp_log_file = solver.fopen_dbg("pdp_file.log", "w");
@@ -98,7 +99,7 @@ VRet pdp11::do_job(pdp_job_type type)
         if(m_is_running)
             return VRet::VFAILURE;
         
-        if(gui_open_file(tmp_str))
+        if(m_main_window->gui_open_file(tmp_str))
         {
             txt2bin(tmp_str, bin_file1);
             load_exec_file(bin_file1);
@@ -208,4 +209,11 @@ VRet pdp11::set_bp()
     uint16_t bp = static_cast<uint16_t>(ROM_start + 2 * m_selected);
     m_core.set_breakpoint(bp);
     return VRet::VSUCCESS;
+}
+
+
+void pdp11::set_main_window(MainWindow *main_window)
+{
+    m_main_window = main_window;
+    m_core.set_main_window(main_window);
 }

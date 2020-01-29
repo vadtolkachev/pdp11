@@ -76,18 +76,54 @@ void pdp_display_controller::unzip_font(uint8_t zipped_font[128][8])
 }
 
 
+void pdp_display_controller::_3bit_to_8bit(uint8_t src, uint8_t *pDest)
+{
+    *pDest = static_cast<uint8_t>(src * 255 / 7);
+}
+
+
+void pdp_display_controller::_2bit_to_8bit(uint8_t src, uint8_t *pDest)
+{
+    *pDest = static_cast<uint8_t>(src * 255 / 3);
+}
+
+
+void pdp_display_controller::_3bit_to_8bit_round(uint8_t src, uint8_t *pDest)
+{
+    float f_src = static_cast<float>(src);
+    float f_dest = 0;
+    f_dest = f_src * 255.0f / 7.0f;
+
+    *pDest = (uint8_t)(f_dest + 0.5f);
+}
+
+
+void pdp_display_controller::_2bit_to_8bit_round(uint8_t src, uint8_t *pDest)
+{
+    float f_src = static_cast<float>(src);
+    float f_dest = 0;
+    f_dest = f_src * 255.0f / 3.0f;
+
+    *pDest = (uint8_t)(f_dest + 0.5f);
+}
+
+
 void pdp_display_controller::_8bit_to_24bit(uint8_t src, v_rgb *dest)
 {
     assert(dest);
 
-    uint8_t red = 0xe0;
-    uint8_t green = 0x1c;
-    uint8_t blue = 0x03;
+    uint8_t red_bits = 0xe0;
+    uint8_t green_bits = 0x1c;
+    uint8_t blue_bits = 0x03;
+
+    uint8_t red = static_cast<uint8_t>((src & red_bits) >> 5);
+    uint8_t green = static_cast<uint8_t>((src & green_bits) >> 2);
+    uint8_t blue = static_cast<uint8_t>(src & blue_bits);
 
     dest->a = 0xff;
-    dest->r = static_cast<uint8_t>(((src & red) >> 5) * 255 / 7);
-    dest->g = static_cast<uint8_t>(((src & green) >> 2) * 255 / 7);
-    dest->b = static_cast<uint8_t>((src & blue) * 255 / 3);
+    _3bit_to_8bit(red, &dest->r);
+    _3bit_to_8bit(green, &dest->g);
+    _2bit_to_8bit(blue, &dest->b);
 }
 
 
