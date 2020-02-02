@@ -6,6 +6,7 @@
 extern const PortSolver solver;
 
 
+/*
 const char disasm_comm_instr[16][20] = 
 { 
     "",
@@ -25,8 +26,30 @@ const char disasm_comm_instr[16][20] =
     "sub",
     ""
 };
+*/
+
+const char disasm_comm_instr[16][20] =
+{
+    "",
+    "mov",
+    "cmp",
+    "",
+    "",
+    "",
+    "add",
+    "",
+    "",
+    "movb",
+    "cmpb",
+    "",
+    "",
+    "",
+    "sub",
+    ""
+};
 
 
+/*
 const char disasm_add_instr[8][20] =
 {
     "mul",
@@ -35,6 +58,19 @@ const char disasm_add_instr[8][20] =
     "ashc",
     "xor",
     "illegal_cmd",
+    "wait",
+    "sob"
+};
+*/
+
+const char disasm_add_instr[8][20] =
+{
+    "beq",
+    "bne",
+    "",
+    "",
+    "",
+    "",
     "wait",
     "sob"
 };
@@ -54,9 +90,9 @@ public:
 
 
 private:
-    void disasm_cmd_bp(uint16_t cmd, uint16_t addr, char *ret_str, bool is_bp) const;
-    void disasm_cmd(uint16_t cmd, uint16_t addr, char *ret_str) const;
-    void disasm_common_cmd(const two_operand_instruction_common &cmd, uint16_t addr, char *ret_str) const;
+    void disasm_cmd_bp(uint16_t cmd, uint16_t data, uint16_t addr, char *ret_str, bool is_bp) const;
+    void disasm_cmd(uint16_t cmd, uint16_t data, uint16_t addr, char *ret_str) const;
+    void disasm_common_cmd(const two_operand_instruction_common &cmd, uint16_t data, char *ret_str) const;
     void disasm_additional_cmd(const two_operand_instruction_additional &cmd, char *ret_str) const;
 
     void get_mem(uint16_t cmd, uint16_t addr, char *ret_str) const;

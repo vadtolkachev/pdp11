@@ -23,11 +23,13 @@ void disasm::disasm_to_file(const uint16_t* bin) const
 	
 	char tmp_str[100] = "";
 	uint16_t cmd;
+	uint16_t data;
 
 	for(int i = 0; i < ROM_size/2; i++)
 	{
 		cmd = bin[i];
-		disasm_cmd(cmd, static_cast<uint16_t>(ROM_start + i * 2), tmp_str);
+		data = bin[i+1];
+		disasm_cmd(cmd, data, static_cast<uint16_t>(ROM_start + i * 2), tmp_str);
 		fprintf(disasm_file, "%s\n", tmp_str);
 	}
 	
@@ -41,14 +43,16 @@ void disasm::disasm_to_str(const uint16_t *bin, char str_arr[ROM_size / 2][100],
 	UNUSED(bp);
 
 	uint16_t cmd;
+	uint16_t data;
 	uint16_t real_addr;
 
 	for(int i = 0; i < ROM_size / 2; i++)
 	{
 		cmd = bin[i];
+		data = bin[i+1];
 		real_addr = static_cast<uint16_t>(i * 2 + ROM_start);
 		//if(real_addr == bp)
-			disasm_cmd(cmd, static_cast<uint16_t>(ROM_start + i * 2), str_arr[i]);
+			disasm_cmd(cmd, data, static_cast<uint16_t>(ROM_start + i * 2), str_arr[i]);
 		//else
 			//disasm_cmd(cmd, static_cast<uint16_t>(ROM_start + i * 2), str_arr[i]);
 	}
@@ -91,7 +95,7 @@ void disasm::get_IO(const uint16_t *bin, char str_arr[IO_size / 2][100]) const
 }
 
 
-void disasm::disasm_cmd(uint16_t cmd, uint16_t addr, char *ret_str) const
+void disasm::disasm_cmd(uint16_t cmd, uint16_t data, uint16_t addr, char *ret_str) const
 {
 	sprintf_s(ret_str, 30, "  %06o:  %06o:  ", addr, cmd);
 
@@ -106,12 +110,12 @@ void disasm::disasm_cmd(uint16_t cmd, uint16_t addr, char *ret_str) const
 	{
 		two_operand_instruction_common pdp_cmd_com;
 		m_parser.get_common_instruction(cmd, &pdp_cmd_com);
-		disasm_common_cmd(pdp_cmd_com, addr, ret_str);
+		disasm_common_cmd(pdp_cmd_com, data, ret_str);
 	}
 }
 
 
-void disasm::disasm_cmd_bp(uint16_t cmd, uint16_t addr, char *ret_str, bool is_bp) const
+void disasm::disasm_cmd_bp(uint16_t cmd, uint16_t data, uint16_t addr, char *ret_str, bool is_bp) const
 {
 	if(is_bp)
 		sprintf_s(ret_str, 30, "  %06o:  %06o:  ", addr, cmd);
@@ -129,12 +133,12 @@ void disasm::disasm_cmd_bp(uint16_t cmd, uint16_t addr, char *ret_str, bool is_b
 	{
 		two_operand_instruction_common pdp_cmd_com;
 		m_parser.get_common_instruction(cmd, &pdp_cmd_com);
-		disasm_common_cmd(pdp_cmd_com, addr, ret_str);
+		disasm_common_cmd(pdp_cmd_com, data, ret_str);
 	}
 }
 
 
-void disasm::disasm_common_cmd(const two_operand_instruction_common &cmd, uint16_t addr, char *ret_str) const
+void disasm::disasm_common_cmd(const two_operand_instruction_common &cmd, uint16_t data, char *ret_str) const
 {
 	char str1[20] = "";
 	char str2[20] = "";
@@ -179,7 +183,7 @@ void disasm::disasm_common_cmd(const two_operand_instruction_common &cmd, uint16
 		if(cmd.reg_src != PC_numb)
 			sprintf_s(str3, 20, "(r%d)+", cmd.reg_src);
 		else
-			sprintf_s(str3, 20, "#%06o", addr+2);
+			sprintf_s(str3, 20, "%06o", data);
 		break;
 
 	default:
