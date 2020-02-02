@@ -77,9 +77,9 @@ const uint16_t opcode_common_add    = 006; // Add, dest += src (N, Z, V, C)
 const uint16_t opcode_common_sub    = 016; // Subtract, dest −= src (N, Z, V, C)
 
 
-const uint16_t opcode_addirional_mul    = 0; // mul	  multiply, r evn    070rss  RS = s*R	     N, Z, V (C see next line)
-                                             // mul	       "  , r odd    070rss  R = s*R		 C="s*R does not fit in word"
-const uint16_t opcode_addirional_div    = 1; // div	  divide		     071rss	 R=RS/s; S=RS%s	 N, Z, V; C="/ by zero"
+const uint16_t opcode_addirional_mul    = 0; // mul      multiply, r evn    070rss  RS = s*R         N, Z, V (C see next line)
+                                             // mul           "  , r odd    070rss  R = s*R         C="s*R does not fit in word"
+const uint16_t opcode_addirional_div    = 1; // div      divide             071rss     R=RS/s; S=RS%s     N, Z, V; C="/ by zero"
 const uint16_t opcode_addirional_ash    = 2; // arith shift              072rss  R=R*2^s         N, Z, V, C
 const uint16_t opcode_addirional_ashc   = 3; // ashc  " conct., r evn    073rss  RS=RS*2^s       N, Z, V, C (C=RS%2 if s > 0)
                                              // ashc  " conct., r odd    073rss  R=R*2^s         N, Z, V, C (C=R%2 if s > 0)
@@ -103,13 +103,13 @@ const uint16_t mode_index_deferred          = 7; // Rn+X is the address of the a
 
 The bits of the PSW are assigned as:
 
-name	width	meaning
-CM    	2	current operation mode, 00 is kernel mode, 11 user mode
-PM    	2	previous operation mode
-****  	4	not used
-IPL   	3	interrupt priority level
-T     	1	enable trace trap
-NZVC	4	condition codes
+name    width    meaning
+CM        2    current operation mode, 00 is kernel mode, 11 user mode
+PM        2    previous operation mode
+****      4    not used
+IPL       3    interrupt priority level
+T         1    enable trace trap
+NZVC    4    condition codes
 
 A pending interrupt will be served if the hardwired bus request number
 (BR) of the interrupting device is greater than the IPL.

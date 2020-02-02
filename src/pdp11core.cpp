@@ -53,16 +53,16 @@ VRet pdp11core::load_exec_file(const char *filename)
         goto load_ef_close;    
     }
 
- 	checkErr = static_cast<int>(fread(&m_memory[ROM_start], size, 1, exec_file));
-	if(checkErr != 1)
-	{
+    checkErr = static_cast<int>(fread(&m_memory[ROM_start], size, 1, exec_file));
+    if(checkErr != 1)
+    {
         DBG_PRINTF("load_exec_file: fread err\n");
         DBG_PRINTF("size = %zu\n", size);
         DBG_PRINTF("checkErr = %d\n", checkErr);
-		
+        
         ret = VRet::VREAD_ERR;
         goto load_ef_close;
-	}
+    }
 
 
 load_ef_close:

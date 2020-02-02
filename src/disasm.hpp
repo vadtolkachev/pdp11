@@ -79,9 +79,9 @@ const char disasm_add_instr[8][20] =
 class disasm
 {
 public:
-	disasm();
+    disasm();
 
-	void disasm_to_file(const uint16_t *bin) const;
+    void disasm_to_file(const uint16_t *bin) const;
     void disasm_to_str(const uint16_t *bin, char str_arr[ROM_size / 2][100], uint16_t bp) const; 
 
     void get_RAM(const uint16_t *bin, char str_arr[RAM_size / 2][100]) const;
@@ -97,5 +97,5 @@ private:
 
     void get_mem(uint16_t cmd, uint16_t addr, char *ret_str) const;
 
-	CmdParser m_parser;
+    CmdParser m_parser;
 };
